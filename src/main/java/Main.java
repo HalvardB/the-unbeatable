@@ -19,6 +19,13 @@ public class Main {
         int playerY = 1;
         final char player = 'X';
 
+        //Add start position
+        int winnerX = 0;
+        int winnerY = 0;
+        terminal.setCursorPosition(winnerX,winnerY);
+        terminal.putCharacter('\u2588');
+        terminal.flush();
+
         // Add Zombie1
         Zombie zombie1 = createZombies(35, 10);
         zombieList.add(zombie1);
@@ -73,7 +80,7 @@ public class Main {
 
             //Check if player got killed (by moving to same position as zombie).
             if (isKilled(zombieList, playerX, playerY)) {
-                System.out.println("isKilled");
+                printMessage(terminal, "GAME OVER!");
                 terminal.setCursorPosition(oldPlayerX, oldPlayerY);
                 terminal.putCharacter(' ');
                 terminal.flush();
@@ -84,7 +91,8 @@ public class Main {
             }
 
             if (hasWon(playerX, playerY)) {
-                System.out.println("hasWon");
+               // System.out.println("hasWon");
+                printMessage(terminal, "YOU WIN!");
                 break;
             }
 
@@ -194,5 +202,22 @@ public class Main {
 
             terminal.flush();
         }
+
+
     }
+
+        public static void printMessage(Terminal terminal, String message) throws IOException {
+
+            char[] chars = message.toCharArray();
+            for (int i = 0; i < chars.length; i++) {
+                terminal.setCursorPosition(i + 35, 12);
+                terminal.putCharacter(chars[i]);
+            }
+            terminal.flush();
+        }
+
+
+        //
+       // public static void printWalls()
+       // final char block = '\u2588';
 }
