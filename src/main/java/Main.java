@@ -3,7 +3,6 @@ import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
 import com.googlecode.lanterna.input.KeyStroke;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,14 +15,14 @@ public class Main {
 
         List<Zombie> zombieList = new ArrayList<>();
 
-        int playerX = 10;
-        int playerY = 10;
+        int playerX = 65;
+        int playerY = 23;
         final char player = 'X';
 
         // Add Zombie1
         Zombie zombie1 = createZombies(35, 10);
         zombieList.add(zombie1);
-        printZombies(zombieList,terminal);
+        moveAndPrintZombies(zombieList,terminal);
 
         // Add player
         terminal.setCursorPosition(playerX, playerY);
@@ -70,14 +69,12 @@ public class Main {
                     break;
 
             }
-            moveZombies(zombieList);
-            printZombies(zombieList,terminal);
+            moveAndPrintZombies(zombieList,terminal);
 
             //Check if player got killed (by moving to same position as zombie).
             if (isKilled(zombieList, playerX, playerY)) {
                 break;
             }
-
 
             // Print player character
             terminal.setCursorPosition(oldPlayerX, oldPlayerY);
@@ -86,8 +83,6 @@ public class Main {
             terminal.putCharacter(player);
             terminal.flush();
         }
-
-
     }
 
     public static Zombie createZombies(int x, int y) {
@@ -105,6 +100,7 @@ public class Main {
         return false;
     }
 
+    /*
     public static void moveZombies (List<Zombie> zombies){
         for (Zombie z : zombies) {
             int zombieX = z.getZombieX();
@@ -116,6 +112,27 @@ public class Main {
     public static void printZombies(List<Zombie> zombies, Terminal terminal) throws IOException {
         for (Zombie z : zombies) {
             terminal.setCursorPosition(z.getZombieX(), z.getZombieY());
+            terminal.putCharacter(z.getCharacter());
+            terminal.flush();
+        }
+    }
+
+     */
+
+    public static void moveAndPrintZombies(List<Zombie> zombies, Terminal terminal) throws IOException {
+        for (Zombie z : zombies) {
+            terminal.setCursorPosition(z.getZombieX(), z.getZombieY());
+            terminal.putCharacter(z.getCharacter());
+            terminal.flush();
+
+            int oldZombieX = z.getZombieX();
+            int oldZombieY = z.getZombieY();
+
+            terminal.setCursorPosition(oldZombieX, oldZombieY);
+            terminal.putCharacter(' ');
+            int zombieX = oldZombieX + z.getZombieSpeed();
+            z.setZombieX(zombieX);
+            terminal.setCursorPosition(zombieX, oldZombieY);
             terminal.putCharacter(z.getCharacter());
             terminal.flush();
         }
