@@ -15,8 +15,8 @@ public class Main {
 
         List<Zombie> zombieList = new ArrayList<>();
 
-        int playerX = 65;
-        int playerY = 23;
+        int playerX = 1;
+        int playerY = 1;
         final char player = 'X';
 
         // Add Zombie1
@@ -73,6 +73,18 @@ public class Main {
 
             //Check if player got killed (by moving to same position as zombie).
             if (isKilled(zombieList, playerX, playerY)) {
+                System.out.println("isKilled");
+                terminal.setCursorPosition(oldPlayerX, oldPlayerY);
+                terminal.putCharacter(' ');
+                terminal.flush();
+                terminal.setCursorPosition(playerX, playerY);
+                terminal.putCharacter('#');
+                terminal.flush();
+                break;
+            }
+
+            if (hasWon(playerX, playerY)) {
+                System.out.println("hasWon");
                 break;
             }
 
@@ -97,6 +109,16 @@ public class Main {
                 return true;
             }
         }
+        return false;
+    }
+
+    public static boolean hasWon(int playerX, int playerY) {
+        int winnerX = 0;
+        int winnerY = 0;
+
+            if (winnerX == playerX && winnerY == playerY) {
+                return true;
+            }
         return false;
     }
 
