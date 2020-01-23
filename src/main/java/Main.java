@@ -5,6 +5,8 @@ import com.googlecode.lanterna.input.KeyStroke;
 
 import javax.swing.*;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
 
@@ -12,30 +14,31 @@ public class Main {
         DefaultTerminalFactory defaultTerminalFactory = new DefaultTerminalFactory();
         Terminal terminal = defaultTerminalFactory.createTerminal();
 
-        int x = 10;
-        int y = 10;
+        List<Zombie> zombieList = new ArrayList<>();
+
+        int playerX = 10;
+        int playerY = 10;
         final char player = 'X';
 
         // Add Zombie1
-        Zombie zombie1 = createZombies(20,20);
-        terminal.setCursorPosition(zombie1.getX(), zombie1.getY());
+        Zombie zombie1 = createZombies(35,10);
+        terminal.setCursorPosition(zombie1.getZombieX(), zombie1.getZombieY());
         terminal.putCharacter(zombie1.getCharacter());
+        zombieList.add(zombie1);
 
         // Add player
-        terminal.setCursorPosition(x,y);
+        terminal.setCursorPosition(playerX,playerY);
         terminal.putCharacter(player);
         terminal.setCursorVisible(false);
         terminal.flush();
-        
+
         // Game loop
         boolean continueReadingInput = true;
         while(continueReadingInput){
 
-
-
             KeyStroke keyStroke = null;
-            int oldX = x;
-            int oldY = y;
+            int oldPlayerX = playerX;
+            int oldPlayerY = playerY;
 
             do {
                 Thread.sleep(5);
@@ -55,26 +58,24 @@ public class Main {
 
             switch (type){
                 case ArrowUp:
-                    y -= 1;
+                    playerY -= 1;
                     break;
                 case ArrowDown:
-                    y += 1;
+                    playerY += 1;
                     break;
                 case ArrowLeft:
-                    x -= 1;
+                    playerX -= 1;
                     break;
                 case ArrowRight:
-                    x += 1;
+                    playerX += 1;
                     break;
 
             }
 
-
-
             // Print player character
-            terminal.setCursorPosition(oldX, oldY);
+            terminal.setCursorPosition(oldPlayerX, oldPlayerY);
             terminal.putCharacter(' ');
-            terminal.setCursorPosition(x,y);
+            terminal.setCursorPosition(playerX,playerY);
             terminal.putCharacter(player);
             terminal.flush();
         }
@@ -85,4 +86,14 @@ public class Main {
         return zombie;
     }
 
+    public static boolean isDead(List<Zombie> zombies, int playerX, int playerY){
+
+        for (Zombie z : zombies) {
+            if(z.getZombieX() == playerX && z.getZombieY() == playerY){
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

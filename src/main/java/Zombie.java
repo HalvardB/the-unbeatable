@@ -1,11 +1,11 @@
 public class Zombie {
-    private int x;
-    private int y;
+    private int zombieX;
+    private int zombieY;
     private char character = '#';
 
-    public Zombie(int x, int y) {
-        this.x = x;
-        this.y = y;
+    public Zombie(int zombieX, int zombieY) {
+        this.zombieX = zombieX;
+        this.zombieY = zombieY;
     }
 
     public char getCharacter() {
@@ -16,12 +16,12 @@ public class Zombie {
         this.character = character;
     }
 
-    public int getX(){
-        return x;
+    public int getZombieX(){
+        return zombieX;
     }
 
-    public int getY(){
-        return y;
+    public int getZombieY(){
+        return zombieY;
     }
 
 }
