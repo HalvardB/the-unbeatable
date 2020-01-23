@@ -16,21 +16,26 @@ public class Main {
         int y = 10;
         final char player = 'X';
 
+        // Add Zombie1
+        Zombie zombie1 = createZombies(20,20);
+        terminal.setCursorPosition(zombie1.getX(), zombie1.getY());
+        terminal.putCharacter(zombie1.getCharacter());
+
+        // Add player
         terminal.setCursorPosition(x,y);
         terminal.putCharacter(player);
         terminal.setCursorVisible(false);
         terminal.flush();
-
-
+        
         // Game loop
         boolean continueReadingInput = true;
         while(continueReadingInput){
 
+
+
             KeyStroke keyStroke = null;
             int oldX = x;
             int oldY = y;
-
-
 
             do {
                 Thread.sleep(5);
@@ -48,7 +53,6 @@ public class Main {
                 terminal.close();
             }
 
-
             switch (type){
                 case ArrowUp:
                     y -= 1;
@@ -64,12 +68,21 @@ public class Main {
                     break;
 
             }
+
+
+
+            // Print player character
             terminal.setCursorPosition(oldX, oldY);
             terminal.putCharacter(' ');
             terminal.setCursorPosition(x,y);
             terminal.putCharacter(player);
             terminal.flush();
         }
+    }
+
+    public static Zombie createZombies(int x, int y){
+        Zombie zombie = new Zombie(x,y);
+        return zombie;
     }
 
 }
