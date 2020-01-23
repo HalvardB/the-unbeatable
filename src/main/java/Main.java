@@ -22,7 +22,7 @@ public class Main {
         // Add Zombie1
         Zombie zombie1 = createZombies(35, 10);
         zombieList.add(zombie1);
-        moveAndPrintZombies(zombieList,terminal);
+        moveAndPrintZombies(zombieList,terminal, playerX, playerY);
 
         // Add player
         terminal.setCursorPosition(playerX, playerY);
@@ -69,7 +69,7 @@ public class Main {
                     break;
 
             }
-            moveAndPrintZombies(zombieList,terminal);
+            moveAndPrintZombies(zombieList,terminal, playerX, playerY);
 
             //Check if player got killed (by moving to same position as zombie).
             if (isKilled(zombieList, playerX, playerY)) {
@@ -119,21 +119,57 @@ public class Main {
 
      */
 
-    public static void moveAndPrintZombies(List<Zombie> zombies, Terminal terminal) throws IOException {
+    public static void moveAndPrintZombies(List<Zombie> zombies, Terminal terminal, int playerX, int playerY) throws IOException {
         for (Zombie z : zombies) {
-            terminal.setCursorPosition(z.getZombieX(), z.getZombieY());
-            terminal.putCharacter(z.getCharacter());
-            terminal.flush();
-
+            // Remove zombie tail
             int oldZombieX = z.getZombieX();
             int oldZombieY = z.getZombieY();
 
+
+            // Find difference between player and zombie
+            int differenceX = playerX - oldZombieX;
+            int differenceY = playerY - oldZombieY;
+
+            // Adding new zombie position
+            int zombieX = oldZombieX + z.getZombieSpeed();
+            int zombieY = oldZombieY + z.getZombieSpeed();
+
+            // Move X axis
+            if(differenceX != 0){
+                if(differenceX < 0){
+                    // Redusere X
+                    zombieX--;
+
+                } else {
+                    // Øke X
+                    zombieX++;
+                }
+            }
+
+            // Move Y axis
+            if(differenceY != 0){
+                if(differenceY < 0){
+                    // Redusere X
+                    zombieY--;
+
+                } else {
+                    // Øke X
+                    zombieY++;
+                }
+            }
+
+
+            // Set Zombie X
+            z.setZombieX(zombieX);
+            z.setZombieY(zombieY);
+            terminal.setCursorPosition(zombieX, zombieY);
+           // System.out.println("zombieX, zombieY: " + zombieX + " , " + zombieY); check  zombie position
+            terminal.putCharacter(z.getCharacter());
+
+            // Remove zombie tail
             terminal.setCursorPosition(oldZombieX, oldZombieY);
             terminal.putCharacter(' ');
-            int zombieX = oldZombieX + z.getZombieSpeed();
-            z.setZombieX(zombieX);
-            terminal.setCursorPosition(zombieX, oldZombieY);
-            terminal.putCharacter(z.getCharacter());
+
             terminal.flush();
         }
     }
