@@ -1,6 +1,7 @@
 public class Zombie {
     private int zombieX;
     private int zombieY;
+    private int zombieSpeed = 1;
     private char character = '#';
 
     public Zombie(int zombieX, int zombieY) {
@@ -20,8 +21,19 @@ public class Zombie {
         return zombieX;
     }
 
+    public void setZombieX(int newZombieX){
+        this.zombieX = newZombieX;
+    }
+
     public int getZombieY(){
         return zombieY;
     }
 
+    public int getZombieSpeed() {
+        return zombieSpeed;
+    }
+
+    public void setZombieSpeed(int zombieSpeed) {
+        this.zombieSpeed = zombieSpeed;
+    }
 }
