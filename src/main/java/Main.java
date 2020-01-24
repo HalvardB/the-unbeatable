@@ -99,7 +99,7 @@ public class Main {
                 boolean quit = quitGame(terminal);
                 if (!quit) {
                     printMessage(terminal, "           ", 0);
-                    printMessage(terminal, "           ", 1);
+                    printMessage(terminal, "                    ", 1);
                     game.startGame();
                 }
             }
@@ -124,7 +124,6 @@ public class Main {
             Character c = keyStroke.getCharacter();
 
             if (c == Character.valueOf('n')) {
-                System.out.println("Quiting the game");
                 terminal.close();
                 return true;
             }
@@ -150,10 +149,7 @@ public class Main {
         int winnerX = 0;
         int winnerY = 0;
 
-        if (winnerX == playerX && winnerY == playerY) {
-            return true;
-        }
-        return false;
+        return winnerX == playerX && winnerY == playerY;
     }
 
     public static void printMessage(Terminal terminal, String message, int k) throws IOException {

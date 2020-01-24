@@ -53,20 +53,19 @@ public class Game {
         // Add Zombie1
         for (int i = 0; i < zombieCount; i++){
             Zombie zombie = new Zombie((int)(Math.random() * 65), (int)(Math.random() * 20));
+            //Zombie zombie = new Zombie( 65, 20);
             zombieList.add(zombie);
-            zombie.moveAndPrintZombies(this.zombieList, this.terminal, this.playerX, this.playerY);
         }
+        Zombie.moveAndPrintZombies(this.zombieList, this.terminal, this.playerX, this.playerY);
     }
+
 
     public void moveAndPrintZombies() throws IOException {
-        for (Zombie z : zombieList) {
-            z.moveAndPrintZombies(this.zombieList, this.terminal, this.playerX, this.playerY);
-        }
+        Zombie.moveAndPrintZombies(this.zombieList, this.terminal, this.playerX, this.playerY);
     }
 
+
     public void restart() throws IOException {
-
-
         // Remove old zombies from game
         if(zombieList.size() > 0){
             for (Zombie z : zombieList) {
@@ -105,7 +104,7 @@ public class Game {
         for (int i = 0; i < zombieCount; i++){
             Zombie zombie = new Zombie((int)(Math.random() * 65), (int)(Math.random() * 20));
             zombieList.add(zombie);
-            zombie.moveAndPrintZombies(this.zombieList, this.terminal, this.playerX, this.playerY);
         }
+        Zombie.moveAndPrintZombies(this.zombieList, this.terminal, this.playerX, this.playerY);
     }
 }
