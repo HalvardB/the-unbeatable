@@ -87,7 +87,7 @@ public class Main {
                 if (!quit) {
                     printMessage(terminal, "           ", 0);
                     printMessage(terminal, "                          ", 1);
-                    game.startGame();
+                    game.restart();
                 }
             }
 

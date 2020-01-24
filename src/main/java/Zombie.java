@@ -86,6 +86,7 @@ public class Zombie {
                 }
             }
 
+
             // Set Zombie X
             z.setZombieX(zombieX);
             z.setZombieY(zombieY);

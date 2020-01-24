@@ -63,4 +63,49 @@ public class Game {
             z.moveAndPrintZombies(this.zombieList, this.terminal, this.playerX, this.playerY);
         }
     }
+
+    public void restart() throws IOException {
+
+
+        // Remove old zombies from game
+        if(zombieList.size() > 0){
+            for (Zombie z : zombieList) {
+                terminal.setCursorPosition(z.getZombieX(), z.getZombieY());
+                terminal.putCharacter(' ');
+                terminal.flush();
+            }
+        }
+
+        // Removing zombies from arraylist
+        zombieList.clear();
+        zombieCount = 0;
+
+        // Moving player back to start
+        this.playerY = 10;
+        this.playerX = 10;
+
+        Main.printMessage(terminal, "           ", 0);
+        Main.printMessage(terminal, "                          ", 1);
+
+        zombieList = new ArrayList<>();
+        zombieCount++;
+
+        // Add winner position
+        terminal.setCursorPosition(winnerX,winnerY);
+        terminal.putCharacter('\u2588');
+        terminal.flush();
+
+        // Add player
+        terminal.setCursorPosition(this.playerX, this.playerY);
+        terminal.putCharacter(this.player);
+        terminal.setCursorVisible(false);
+        terminal.flush();
+
+        // Add Zombie1
+        for (int i = 0; i < zombieCount; i++){
+            Zombie zombie = new Zombie((int)(Math.random() * 65), (int)(Math.random() * 20));
+            zombieList.add(zombie);
+            zombie.moveAndPrintZombies(this.zombieList, this.terminal, this.playerX, this.playerY);
+        }
+    }
 }
