@@ -13,37 +13,20 @@ public class Main {
         DefaultTerminalFactory defaultTerminalFactory = new DefaultTerminalFactory();
         Terminal terminal = defaultTerminalFactory.createTerminal();
 
-        List<Zombie> zombieList = new ArrayList<>();
+        Game game = new Game(terminal);
+        game.startGame();
 
-        int playerX = 1;
-        int playerY = 1;
-        final char player = 'X';
-
-        //Add start position
-        int winnerX = 0;
-        int winnerY = 0;
-        terminal.setCursorPosition(winnerX,winnerY);
-        terminal.putCharacter('\u2588');
-        terminal.flush();
-
-        // Add Zombie1
-        Zombie zombie1 = createZombies(35, 10);
-        zombieList.add(zombie1);
-        moveAndPrintZombies(zombieList,terminal, playerX, playerY);
-
-        // Add player
-        terminal.setCursorPosition(playerX, playerY);
-        terminal.putCharacter(player);
-        terminal.setCursorVisible(false);
-        terminal.flush();
+//        printMessage(terminal, "WELCOME to the UNBEATABLE game of LIFE!", 0);
+//        printMessage(terminal, "Run from the zombie and get to safety (block)!", 1);
+//        printMessage(terminal, "You are X",2 );
 
         // Game loop
         boolean continueReadingInput = true;
         while (continueReadingInput) {
 
             KeyStroke keyStroke = null;
-            int oldPlayerX = playerX;
-            int oldPlayerY = playerY;
+            int oldPlayerX = game.playerX;
+            int oldPlayerY = game.playerY;
 
             do {
                 Thread.sleep(5);
@@ -63,46 +46,54 @@ public class Main {
 
             switch (type) {
                 case ArrowUp:
-                    playerY -= 1;
+                    game.playerY -= 1;
                     break;
                 case ArrowDown:
-                    playerY += 1;
+                    game.playerY += 1;
                     break;
                 case ArrowLeft:
-                    playerX -= 1;
+                    game.playerX -= 1;
                     break;
                 case ArrowRight:
-                    playerX += 1;
+                    game.playerX += 1;
                     break;
 
             }
-            moveAndPrintZombies(zombieList,terminal, playerX, playerY);
+            game.moveAndPrintZombies();
 
             //Check if player got killed (by moving to same position as zombie).
-            if (isKilled(zombieList, playerX, playerY)) {
-                printMessage(terminal, "GAME OVER!");
+            if (isKilled(game.zombieList, game.playerX, game.playerY)) {
+                printMessage(terminal, "GAME OVER!", 0);
+                printMessage(terminal, "CONTINUE PLAYING? (y/n)", 1);
                 terminal.setCursorPosition(oldPlayerX, oldPlayerY);
                 terminal.putCharacter(' ');
                 terminal.flush();
-                terminal.setCursorPosition(playerX, playerY);
+
+                terminal.setCursorPosition(game.playerX, game.playerY);
                 terminal.putCharacter('#');
                 terminal.flush();
 
-                boolean quit = quitGame(terminal);
+                quitGame(terminal);
+
+                printMessage(terminal, "           ", 0);
+                printMessage(terminal, "           ", 1);
             }
 
-            if (hasWon(playerX, playerY)) {
+            if (hasWon(game.playerX, game.playerY)) {
                // System.out.println("hasWon");
-                printMessage(terminal, "YOU WIN!");
+                printMessage(terminal, "YOU WIN!", 0);
+                printMessage(terminal, "CONTINUE PLAYING? (y/n)", 1);
+                quitGame(terminal);
 
-                boolean quit = quitGame(terminal);
+                printMessage(terminal, "           ", 0);
+                printMessage(terminal, "           ", 1);
             }
 
             // Print player character
             terminal.setCursorPosition(oldPlayerX, oldPlayerY);
             terminal.putCharacter(' ');
-            terminal.setCursorPosition(playerX, playerY);
-            terminal.putCharacter(player);
+            terminal.setCursorPosition(game.playerX, game.playerY);
+            terminal.putCharacter(game.player);
             terminal.flush();
         }
     }
@@ -126,10 +117,7 @@ public class Main {
         }
     }
 
-    public static Zombie createZombies(int x, int y) {
-        Zombie zombie = new Zombie(x,y);
-        return zombie;
-    }
+
 
     public static boolean isKilled(List<Zombie> zombies, int playerX, int playerY) {
 
@@ -170,68 +158,13 @@ public class Main {
 
      */
 
-    public static void moveAndPrintZombies(List<Zombie> zombies, Terminal terminal, int playerX, int playerY) throws IOException {
-        for (Zombie z : zombies) {
-            // Remove zombie tail
-            int oldZombieX = z.getZombieX();
-            int oldZombieY = z.getZombieY();
 
 
-            // Find difference between player and zombie
-            int differenceX = playerX - oldZombieX;
-            int differenceY = playerY - oldZombieY;
-
-            // Adding new zombie position
-            int zombieX = oldZombieX + z.getZombieSpeed();
-            int zombieY = oldZombieY + z.getZombieSpeed();
-
-            // Move X axis
-            if(differenceX != 0){
-                if(differenceX < 0){
-                    // Redusere X
-                    zombieX--;
-
-                } else {
-                    // Øke X
-                    zombieX++;
-                }
-            }
-
-            // Move Y axis
-            if(differenceY != 0){
-                if(differenceY < 0){
-                    // Redusere X
-                    zombieY--;
-
-                } else {
-                    // Øke X
-                    zombieY++;
-                }
-            }
-
-
-            // Set Zombie X
-            z.setZombieX(zombieX);
-            z.setZombieY(zombieY);
-            terminal.setCursorPosition(zombieX, zombieY);
-           // System.out.println("zombieX, zombieY: " + zombieX + " , " + zombieY); check  zombie position
-            terminal.putCharacter(z.getCharacter());
-
-            // Remove zombie tail
-            terminal.setCursorPosition(oldZombieX, oldZombieY);
-            terminal.putCharacter(' ');
-
-            terminal.flush();
-        }
-
-
-    }
-
-        public static void printMessage(Terminal terminal, String message) throws IOException {
+        public static void printMessage(Terminal terminal, String message, int k) throws IOException {
 
             char[] chars = message.toCharArray();
             for (int i = 0; i < chars.length; i++) {
-                terminal.setCursorPosition(i + 35, 12);
+                terminal.setCursorPosition(i + 15, 12 + k);
                 terminal.putCharacter(chars[i]);
             }
             terminal.flush();
