@@ -33,16 +33,13 @@ public class Game {
         // Add Zombie1
         Zombie zombie1 = new Zombie(35, 10);
         zombieList.add(zombie1);
-        this.moveAndPrintZombies();
+        zombie1.moveAndPrintZombies(this.zombieList, this.terminal, this.playerX, this.playerY);
+
     }
 
     public void moveAndPrintZombies() throws IOException {
         for (Zombie z : zombieList) {
-            Zombie.moveAndPrintZombies(this.zombieList, this.terminal, this.playerX, this.playerY);
+            z.moveAndPrintZombies(this.zombieList, this.terminal, this.playerX, this.playerY);
         }
     }
-
-
-
-
 }
