@@ -8,9 +8,9 @@ public class Game {
     private Terminal terminal;
     int playerX = 10;
     int playerY = 10;
-    final char player = 'X';
-    int winnerX = 0;
-    int winnerY = 0;
+    final char player = '\u03D8';
+    int winnerX = 70;
+    int winnerY = 13;
     List<Zombie> zombieList = new ArrayList<>();
     int zombieCount = 0;
 
@@ -29,33 +29,9 @@ public class Game {
             }
         }
 
-        // Moving player back to start
-        this.playerY = 10;
-        this.playerX = 10;
+        movePlayerAddZombie();
 
-        Main.printMessage(terminal, "           ", 0);
-        Main.printMessage(terminal, "                          ", 1);
 
-        zombieList = new ArrayList<>();
-        zombieCount++;
-
-        // Add winner position
-        terminal.setCursorPosition(winnerX,winnerY);
-        terminal.putCharacter('\u2588');
-        terminal.flush();
-
-        // Add player
-        terminal.setCursorPosition(this.playerX, this.playerY);
-        terminal.putCharacter(this.player);
-        terminal.setCursorVisible(false);
-        terminal.flush();
-
-        // Add Zombie1
-        for (int i = 0; i < zombieCount; i++){
-            Zombie zombie = new Zombie((int)(Math.random() * 65), (int)(Math.random() * 20));
-            //Zombie zombie = new Zombie( 65, 20);
-            zombieList.add(zombie);
-        }
         Zombie.moveAndPrintZombies(this.zombieList, this.terminal, this.playerX, this.playerY);
     }
 
@@ -79,6 +55,11 @@ public class Game {
         zombieList.clear();
         zombieCount = 0;
 
+        movePlayerAddZombie();
+        Zombie.moveAndPrintZombies(this.zombieList, this.terminal, this.playerX, this.playerY);
+    }
+
+    public void movePlayerAddZombie() throws IOException {
         // Moving player back to start
         this.playerY = 10;
         this.playerX = 10;
@@ -88,6 +69,8 @@ public class Game {
 
         zombieList = new ArrayList<>();
         zombieCount++;
+
+        Main.printMessage(terminal, "Level: " + zombieCount, -12);
 
         // Add winner position
         terminal.setCursorPosition(winnerX,winnerY);
@@ -103,8 +86,8 @@ public class Game {
         // Add Zombie1
         for (int i = 0; i < zombieCount; i++){
             Zombie zombie = new Zombie((int)(Math.random() * 65), (int)(Math.random() * 20));
+            //Zombie zombie = new Zombie( 65, 20);
             zombieList.add(zombie);
         }
-        Zombie.moveAndPrintZombies(this.zombieList, this.terminal, this.playerX, this.playerY);
     }
 }

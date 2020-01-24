@@ -6,50 +6,21 @@ import java.util.List;
 public class Zombie {
     private int zombieX;
     private int zombieY;
-    private int zombieSpeed = 0;
-    private char character = '#';
 
     public Zombie(int zombieX, int zombieY) {
         this.zombieX = zombieX;
         this.zombieY = zombieY;
     }
 
-    public char getCharacter() {
-        return character;
-    }
+    public char getCharacter() { return '\u03EA'; }
 
-    public void setCharacter(char character) {
-        this.character = character;
-    }
+    public int getZombieX(){ return zombieX; }
 
-    public int getZombieX(){
-        return zombieX;
-    }
+    public void setZombieX(int newZombieX){ this.zombieX = newZombieX; }
 
-    public void setZombieX(int newZombieX){
-        this.zombieX = newZombieX;
-    }
+    public void setZombieY(int newZombieY){ this.zombieY = newZombieY; }
 
-    public void setZombieY(int newZombieY){
-        this.zombieY = newZombieY;
-    }
-
-    public int getZombieY(){
-        return zombieY;
-    }
-
-    public int getZombieSpeed() {
-        return zombieSpeed;
-    }
-
-    public void setZombieSpeed(int zombieSpeed) {
-        this.zombieSpeed = zombieSpeed;
-    }
-
-    public static Zombie createZombies(int x, int y) {
-        Zombie zombie = new Zombie(x,y);
-        return zombie;
-    }
+    public int getZombieY(){ return zombieY; }
 
     public static void moveAndPrintZombies(List<Zombie> zombies, Terminal terminal, int playerX, int playerY) throws IOException {
         for (Zombie z : zombies) {
@@ -62,24 +33,17 @@ public class Zombie {
             int differenceY = playerY - oldZombieY;
 
             // Adding new zombie position
-            int zombieX = oldZombieX; //+ z.getZombieSpeed();
-            int zombieY = oldZombieY; //+ z.getZombieSpeed();
+            int zombieX = oldZombieX;
+            int zombieY = oldZombieY;
 
             // Move X axis
-            if(differenceX != 0){
-                if(differenceX < 0){
-                    zombieX--;
-                } else {
-                    zombieX++;
-                }
-            } else if (differenceY != 0){
-                if(differenceY < 0){
-                    zombieY--;
-                } else {
-                    zombieY++;
-                }
-            }
+            if(differenceX != 0)
+                if (differenceX < 0) zombieX--;
+                else zombieX++;
 
+            if (differenceY != 0)
+                if (differenceY < 0) zombieY--;
+                else zombieY++;
 
             // Set Zombie X
             z.setZombieX(zombieX);

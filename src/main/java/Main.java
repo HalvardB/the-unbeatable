@@ -4,7 +4,6 @@ import com.googlecode.lanterna.terminal.Terminal;
 import com.googlecode.lanterna.input.KeyStroke;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
@@ -17,17 +16,20 @@ public class Main {
         game.startGame();
 
         // Print welcome message
-        printMessage(terminal, "WELCOME to the UNBEATABLE game of LIFE!", 0);
-        printMessage(terminal, "Run from the zombie and get to safety (block)!", 1);
-        printMessage(terminal, "You are X",2 );
-
-        int firstClick = 0;
+        printMessage(terminal, "WELCOME to the UNBEATABLE game of LIFE!", -1);
+        printMessage(terminal, "Are you able to survive the hungry zombies?", 1);
+        printMessage(terminal, "Instructions to survive:", 3);
+        printMessage(terminal, "-Avoid the zombies using your left, right, up and down arrows", 4);
+        printMessage(terminal, "-You are " + '\u03D8' +", and the zombie(s) are " + '\u03EA', 5);
+        printMessage(terminal, "-Safe point is the white square", 6);
+        printMessage(terminal, "-Press 'q' to quit", 7);
+        printMessage(terminal, "How many levels can you reach before you become zombie food?", 9);
 
         // Game loop
         boolean continueReadingInput = true;
         while (continueReadingInput) {
 
-            KeyStroke keyStroke = null;
+            KeyStroke keyStroke;
             int oldPlayerX = game.playerX;
             int oldPlayerY = game.playerY;
 
@@ -37,11 +39,14 @@ public class Main {
             } while (keyStroke == null);
 
             // Remove welcome message
-            if(firstClick == 0){
-                printMessage(terminal, "                                       ", 0);
-                printMessage(terminal, "                                              ", 1);
-                printMessage(terminal, "         ",2 );
-            }
+            printMessage(terminal, "                                       ", -1);
+            printMessage(terminal, "                                           ", 1);
+            printMessage(terminal, "                        ", 3);
+            printMessage(terminal, "                                                             ", 4);
+            printMessage(terminal, "                                                     ", 5);
+            printMessage(terminal, "                               ", 6);
+            printMessage(terminal, "                       ", 7);
+            printMessage(terminal, "                                                            ", 9);
 
             Character c = keyStroke.getCharacter();
             KeyType type = keyStroke.getKeyType();
@@ -69,6 +74,20 @@ public class Main {
                     break;
 
             }
+
+            if (game.playerX == 80) {
+                game.playerX = 0;
+            }
+            if (game.playerX < 0) {
+                game.playerX = 79;
+            }
+            if (game.playerY == 24) {
+                game.playerY = 0;
+            }
+            if (game.playerY < 0) {
+                game.playerY = 23;
+            }
+
             game.moveAndPrintZombies();
 
             //Check if player got killed (by moving to same position as zombie).
@@ -80,7 +99,7 @@ public class Main {
                 terminal.flush();
 
                 terminal.setCursorPosition(game.playerX, game.playerY);
-                terminal.putCharacter('#');
+                terminal.putCharacter('\u03EA');
                 terminal.flush();
 
                 boolean quit = quitGame(terminal);
@@ -114,7 +133,7 @@ public class Main {
     }
 
     private static boolean quitGame(Terminal terminal) throws InterruptedException, IOException {
-        KeyStroke keyStroke = null;
+        KeyStroke keyStroke;
         while (true) {
             do {
                 Thread.sleep(5);
@@ -146,8 +165,8 @@ public class Main {
     }
 
     public static boolean hasWon(int playerX, int playerY) {
-        int winnerX = 0;
-        int winnerY = 0;
+        int winnerX = 70;
+        int winnerY = 13;
 
         return winnerX == playerX && winnerY == playerY;
     }
