@@ -16,9 +16,12 @@ public class Main {
         Game game = new Game(terminal);
         game.startGame();
 
-//        printMessage(terminal, "WELCOME to the UNBEATABLE game of LIFE!", 0);
-//        printMessage(terminal, "Run from the zombie and get to safety (block)!", 1);
-//        printMessage(terminal, "You are X",2 );
+        // Print welcome message
+        printMessage(terminal, "WELCOME to the UNBEATABLE game of LIFE!", 0);
+        printMessage(terminal, "Run from the zombie and get to safety (block)!", 1);
+        printMessage(terminal, "You are X",2 );
+
+        int firstClick = 0;
 
         // Game loop
         boolean continueReadingInput = true;
@@ -32,6 +35,13 @@ public class Main {
                 Thread.sleep(5);
                 keyStroke = terminal.pollInput();
             } while (keyStroke == null);
+
+            // Remove welcome message
+            if(firstClick == 0){
+                printMessage(terminal, "                                       ", 0);
+                printMessage(terminal, "                                              ", 1);
+                printMessage(terminal, "         ",2 );
+            }
 
             Character c = keyStroke.getCharacter();
             KeyType type = keyStroke.getKeyType();
@@ -73,20 +83,25 @@ public class Main {
                 terminal.putCharacter('#');
                 terminal.flush();
 
-                quitGame(terminal);
-
-                printMessage(terminal, "           ", 0);
-                printMessage(terminal, "           ", 1);
+                boolean quit = quitGame(terminal);
+                if (!quit) {
+                    printMessage(terminal, "           ", 0);
+                    printMessage(terminal, "                          ", 1);
+                    game.startGame();
+                }
             }
 
             if (hasWon(game.playerX, game.playerY)) {
-               // System.out.println("hasWon");
+                // System.out.println("hasWon");
                 printMessage(terminal, "YOU WIN!", 0);
                 printMessage(terminal, "CONTINUE PLAYING? (y/n)", 1);
-                quitGame(terminal);
 
-                printMessage(terminal, "           ", 0);
-                printMessage(terminal, "           ", 1);
+                boolean quit = quitGame(terminal);
+                if (!quit) {
+                    printMessage(terminal, "           ", 0);
+                    printMessage(terminal, "           ", 1);
+                    game.startGame();
+                }
             }
 
             // Print player character
@@ -100,23 +115,25 @@ public class Main {
 
     private static boolean quitGame(Terminal terminal) throws InterruptedException, IOException {
         KeyStroke keyStroke = null;
+        while (true) {
+            do {
+                Thread.sleep(5);
+                keyStroke = terminal.pollInput();
+            } while (keyStroke == null);
 
-        do {
-            Thread.sleep(5);
-            keyStroke = terminal.pollInput();
-        } while (keyStroke == null);
+            Character c = keyStroke.getCharacter();
 
-        Character c = keyStroke.getCharacter();
+            if (c == Character.valueOf('n')) {
+                System.out.println("Quiting the game");
+                terminal.close();
+                return true;
+            }
+            if (c == Character.valueOf('y')) {
+                return false;
+            }
 
-        if (c == Character.valueOf('n')) {
-            System.out.println("Quiting the game");
-            terminal.close();
-            return true;
-        } else {
-            return false;
         }
     }
-
 
 
     public static boolean isKilled(List<Zombie> zombies, int playerX, int playerY) {
@@ -133,45 +150,19 @@ public class Main {
         int winnerX = 0;
         int winnerY = 0;
 
-            if (winnerX == playerX && winnerY == playerY) {
-                return true;
-            }
+        if (winnerX == playerX && winnerY == playerY) {
+            return true;
+        }
         return false;
     }
 
-    /*
-    public static void moveZombies (List<Zombie> zombies){
-        for (Zombie z : zombies) {
-            int zombieX = z.getZombieX();
-            int newZombieX = zombieX + z.getZombieSpeed();
-            z.setZombieX(newZombieX);
+    public static void printMessage(Terminal terminal, String message, int k) throws IOException {
 
+        char[] chars = message.toCharArray();
+        for (int i = 0; i < chars.length; i++) {
+            terminal.setCursorPosition(i + 15, 12 + k);
+            terminal.putCharacter(chars[i]);
         }
+        terminal.flush();
     }
-    public static void printZombies(List<Zombie> zombies, Terminal terminal) throws IOException {
-        for (Zombie z : zombies) {
-            terminal.setCursorPosition(z.getZombieX(), z.getZombieY());
-            terminal.putCharacter(z.getCharacter());
-            terminal.flush();
-        }
-    }
-
-     */
-
-
-
-        public static void printMessage(Terminal terminal, String message, int k) throws IOException {
-
-            char[] chars = message.toCharArray();
-            for (int i = 0; i < chars.length; i++) {
-                terminal.setCursorPosition(i + 15, 12 + k);
-                terminal.putCharacter(chars[i]);
-            }
-            terminal.flush();
-        }
-
-
-        //
-       // public static void printWalls()
-       // final char block = '\u2588';
 }

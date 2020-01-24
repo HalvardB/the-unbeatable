@@ -57,7 +57,6 @@ public class Zombie {
             int oldZombieX = z.getZombieX();
             int oldZombieY = z.getZombieY();
 
-
             // Find difference between player and zombie
             int differenceX = playerX - oldZombieX;
             int differenceY = playerY - oldZombieY;
@@ -76,10 +75,7 @@ public class Zombie {
                     // Øke X
                     zombieX++;
                 }
-            }
-
-            // Move Y axis
-            if(differenceY != 0){
+            } else if (differenceY != 0){
                 if(differenceY < 0){
                     // Redusere X
                     zombieY--;
@@ -89,7 +85,6 @@ public class Zombie {
                     zombieY++;
                 }
             }
-
 
             // Set Zombie X
             z.setZombieX(zombieX);
@@ -101,10 +96,7 @@ public class Zombie {
             // Remove zombie tail
             terminal.setCursorPosition(oldZombieX, oldZombieY);
             terminal.putCharacter(' ');
-
             terminal.flush();
         }
-
-
     }
 }
