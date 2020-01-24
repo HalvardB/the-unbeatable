@@ -87,13 +87,15 @@ public class Main {
                 terminal.setCursorPosition(playerX, playerY);
                 terminal.putCharacter('#');
                 terminal.flush();
-                break;
+
+                boolean quit = quitGame(terminal);
             }
 
             if (hasWon(playerX, playerY)) {
                // System.out.println("hasWon");
                 printMessage(terminal, "YOU WIN!");
-                break;
+
+                boolean quit = quitGame(terminal);
             }
 
             // Print player character
@@ -102,6 +104,25 @@ public class Main {
             terminal.setCursorPosition(playerX, playerY);
             terminal.putCharacter(player);
             terminal.flush();
+        }
+    }
+
+    private static boolean quitGame(Terminal terminal) throws InterruptedException, IOException {
+        KeyStroke keyStroke = null;
+
+        do {
+            Thread.sleep(5);
+            keyStroke = terminal.pollInput();
+        } while (keyStroke == null);
+
+        Character c = keyStroke.getCharacter();
+
+        if (c == Character.valueOf('n')) {
+            System.out.println("Quiting the game");
+            terminal.close();
+            return true;
+        } else {
+            return false;
         }
     }
 
